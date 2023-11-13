@@ -1,32 +1,74 @@
 package christmas;
 
-// - [ ] 크리스마스 디데이 할인
-//     - [ ] 이벤트 기간 확인 ( 12.1 ~ 12.25 )
-//     - [ ] 할인 금액 계산 
-// ( e.g. 시작일인 12월 1일에 1,000원, 2일에 1,100원, ..., 25일엔 3,400원 할인 )
-    
-public class Event {
-    public void christmas_Dday(Order menu_list, int visit_date){
-        int total = 0;
+import java.util.ArrayList;
+import java.util.List;
 
-        if (CheckDate(visit_date) == "christmas"){
-            for (String menuName : menu_list.getMenuNames()) {
-            
-                Menu selectedMenu = getMenuByName(menuName);
-            if (selectedMenu != null) {
-                total += selectedMenu.getPrice();
-            }
+public class Event {
+
+    public List<String> checkEventAllow(Order menuList, int visitDate){
+        List<String> eventList = new ArrayList<>();
+        int total = calculateTotal(menuList);
+
+        if (total < 10000 || onlyDrinks(menuList)){
+            eventList.add("이벤트 불가");
         }
-            System.out.println(total);
-        }
+
+        eventList.addAll(christmas_Dday(menuList, visitDate));
+
+        return eventList;
     }
 
-    private String CheckDate(int visit_date){
+    private List<String> christmas_Dday(Order menuList, int visitDate){
+        List<String> events = new ArrayList<>();
+        int discount = 0;
+        if (checkDate(visitDate).equals("christmas")){
+            discount = calculateChristmasDiscount(visitDate);
+        }
+        events.add("christmas");
+        events.add(String.valueOf(discount));
+        return events;
+    }
+
+    private boolean onlyDrinks(Order menuList){
+        boolean hasNonDrink = true;
+        for (String menuName : menuList.getMenuNames()){
+            Menu selectedMenu = getMenuByName(menuName);
+            if (selectedMenu != null && selectedMenu.getCategory() != Menu.Category.음료){
+                hasNonDrink = false;
+            }
+        }
+        return hasNonDrink;
+    }
+
+    private int calculateTotal(Order menuList){
+        int total = 0;
+        List<String> menuNames = menuList.getMenuNames();
+        List<Integer> menuCounts = menuList.getMenuCounts();
+
+        for (int i = 0; i < menuNames.size(); i++) {
+            String menuName = menuNames.get(i);
+            int menuCount = menuCounts.get(i);
+            
+            Menu selectedMenu = getMenuByName(menuName);
+
+            if (selectedMenu != null) {
+                total += selectedMenu.getPrice() * menuCount;
+            }
+        }
+        return total;
+    }
+
+    private int calculateChristmasDiscount(int visitDate){
+        int discount = 1000 + (visitDate - 1) * 100;
+        return discount > 3400 ? 3400 : discount;
+    }
+
+    private String checkDate(int visitDate){
         String event_type = "";
-        if (visit_date > 0 && visit_date < 26){
+        if (visitDate > 0 && visitDate < 26){
             event_type = "christmas";
         }
-        else if (visit_date > 0  && visit_date < 32){
+        else if (visitDate > 0  && visitDate < 32){
             event_type = "December";
         }
 
