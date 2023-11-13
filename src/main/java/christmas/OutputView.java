@@ -3,11 +3,21 @@ package christmas;
 import java.util.List;
 
 public class OutputView {
+    private static final String CHRISTMAS_EVENT_NAME = "christmas";
+    private static final String GIFT_EVENT_NAME = "giftEvent";
+    private static final String SPECIAL_EVENT_NAME = "specialDiscount";
+    private static final String EVENT_NOT_ALLOWED_MESSAGE = "이벤트 불가";
+    private static final String WEEKDAY_EVENT_MESSAGE = "평일 할인";
+    private static final String WEEKEND_EVENT_MESSAGE = "주말 할인";
+
+
     public void allEvent(List<String> eventList, Order menuList, int visitDate){
         printOrderMenu(menuList, visitDate);
         printOrderAmount(eventList.get(0));
+        printGift(eventList);
+
         
-        if (!eventList.contains("이벤트 불가")){
+        if (!eventList.contains(EVENT_NOT_ALLOWED_MESSAGE)){
             discountEvent(eventList);
         }
     }
@@ -16,23 +26,37 @@ public class OutputView {
         System.out.println("");
         System.out.println("<혜택 내역>");
         
-        if (eventList.contains("christmas")){
-            int christmasIndex = eventList.indexOf("christmas")+1;
+        if (eventList.contains(CHRISTMAS_EVENT_NAME)){
+            int christmasIndex = eventList.indexOf(CHRISTMAS_EVENT_NAME)+1;
             printChristmasDday(Integer.parseInt(eventList.get(christmasIndex)));
         }
-        if (eventList.contains("평일 할인")){
-            int dayIndex = eventList.indexOf("평일 할인")+1;
+        if (eventList.contains(WEEKDAY_EVENT_MESSAGE)){
+            int dayIndex = eventList.indexOf(WEEKDAY_EVENT_MESSAGE)+1;
             printWeekday(Integer.parseInt(eventList.get(dayIndex)));
         }
-        if (eventList.contains("주말 할인")){
-            int dayIndex = eventList.indexOf("주말 할인")+1;
+        if (eventList.contains(WEEKEND_EVENT_MESSAGE)){
+            int dayIndex = eventList.indexOf(WEEKEND_EVENT_MESSAGE)+1;
             printWeekend(Integer.parseInt(eventList.get(dayIndex)));
         }
-        if (eventList.contains("specialDiscount")){
-            int dayIndex = eventList.indexOf("specialDiscount")+1;
+        if (eventList.contains(SPECIAL_EVENT_NAME)){
+            int dayIndex = eventList.indexOf(SPECIAL_EVENT_NAME)+1;
             printSpecial(Integer.parseInt(eventList.get(dayIndex)));
         }
-        
+    }
+
+    private void printGift(List<String> eventList){
+        System.out.println("");
+        System.out.println("<증정 메뉴>");
+
+        String giftname = "없음";
+
+        if (eventList.contains(GIFT_EVENT_NAME)) {
+            int index = eventList.indexOf(GIFT_EVENT_NAME) + 1;
+            if (index < eventList.size() && eventList.get(index).equals("샴페인")) {
+                giftname = eventList.get(index) + " 1개";
+            }
+        }
+        System.out.println(giftname);
     }
 
     private void printSpecial(int total){
