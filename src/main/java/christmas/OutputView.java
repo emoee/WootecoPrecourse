@@ -28,6 +28,16 @@ public class OutputView {
             int dayIndex = eventList.indexOf("주말 할인")+1;
             printWeekend(Integer.parseInt(eventList.get(dayIndex)));
         }
+        if (eventList.contains("specialDiscount")){
+            int dayIndex = eventList.indexOf("specialDiscount")+1;
+            printSpecial(Integer.parseInt(eventList.get(dayIndex)));
+        }
+        
+    }
+
+    private void printSpecial(int total){
+        String formattedTotal = String.format("%,d", total);
+        System.out.println("특별 할인: -" + formattedTotal + "원");
     }
 
     private void printOrderMenu(Order menuList, int visitDate){

@@ -7,10 +7,21 @@ import java.util.List;
 
 public class InputView {
     public int readDate() {
-        System.out.println("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)");
-        int visit_date = Integer.parseInt(Console.readLine());
-
-        return visit_date;
+        int visit_date;
+        
+        while (true) {
+            System.out.println("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)");
+            try {
+                visit_date = Integer.parseInt(Console.readLine());
+                if (visit_date >= 1 && visit_date <= 31) {
+                    break; 
+                }
+                System.out.println("[ERROR] 1 이상 31 이하의 숫자로만 입력해 주세요.");
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+            }
+        }
+    return visit_date;
     }
 
     public Order readMenu() {

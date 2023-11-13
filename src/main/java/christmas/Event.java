@@ -3,9 +3,7 @@ package christmas;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Event {
     public List<String> checkEventAllow(Order menuList, int visitDate){
@@ -20,8 +18,31 @@ public class Event {
         eventList.addAll(christmas_Dday(menuList, visitDate));
         eventList.addAll(weekday(menuList, visitDate));
         eventList.addAll(weekend(menuList, visitDate));
+        eventList.addAll(specialDiscount(menuList, visitDate));
 
         return eventList;
+    }
+
+    private List<String> specialDiscount(Order menuList, int visitDate) {
+        List<String> events = new ArrayList<>();
+        int discount = 0;
+        if (isSpecialDiscountPeriod(visitDate)) {
+            discount = 1000;
+        }
+        
+        events.add("specialDiscount");
+        events.add(String.valueOf(discount));
+
+        return events;
+    }
+
+    private boolean isSpecialDiscountPeriod(int visitDate){
+        LocalDate date = LocalDate.of(2023, 12, visitDate);
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        if (visitDate == 25 || dayOfWeek.getValue() == 7){
+            return true;
+        }
+        return false;
     }
 
     private List<String> christmas_Dday(Order menuList, int visitDate){
@@ -45,8 +66,8 @@ public class Event {
 
     private List<String> generateEvent(Order menuList, int visitDate, Menu.Category category, String eventName) {
         List<String> events = new ArrayList<>();
-        int discount = calculateDiscount(menuList, visitDate, category);
-    
+        int discount = discount = calculateDiscount(menuList, visitDate, category);
+        
         if (discount > 0) {
             events.add(eventName);
             events.add(String.valueOf(discount));
@@ -134,9 +155,6 @@ public class Event {
         String event_type = "";
         if (visitDate > 0 && visitDate < 26){
             event_type = "christmas";
-        }
-        else if (visitDate > 0  && visitDate < 32){
-            event_type = "December";
         }
 
         return event_type;
