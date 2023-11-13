@@ -4,16 +4,15 @@ import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
-        // TODO: 프로그램 구현
         InputView inputview = new InputView();
         OutputView outputView = new OutputView();
         Event event = new Event();
 
-        int visit_date = inputview.readDate();
-        Order menu_list = inputview.readMenu();
+        int visitDate = inputview.readDate();
+        Order menuList = inputview.readMenu();
 
-        List<String> evenList = event.checkEventAllow(menu_list, visit_date);
+        List<String> evenList = event.checkEventAllow(menuList, visitDate);
         
-        outputView.allEvent(evenList);
+        outputView.allEvent(evenList, menuList, visitDate);
     }
 }

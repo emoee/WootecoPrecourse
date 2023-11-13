@@ -8,6 +8,7 @@ public class Event {
     public List<String> checkEventAllow(Order menuList, int visitDate){
         List<String> eventList = new ArrayList<>();
         int total = calculateTotal(menuList);
+        eventList.add(String.valueOf(total));
 
         if (total < 10000 || onlyDrinks(menuList)){
             eventList.add("이벤트 불가");
