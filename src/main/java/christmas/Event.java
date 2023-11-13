@@ -1,10 +1,13 @@
 package christmas;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Event {
-
     public List<String> checkEventAllow(Order menuList, int visitDate){
         List<String> eventList = new ArrayList<>();
         int total = calculateTotal(menuList);
@@ -15,6 +18,8 @@ public class Event {
         }
 
         eventList.addAll(christmas_Dday(menuList, visitDate));
+        eventList.addAll(weekday(menuList, visitDate));
+        eventList.addAll(weekend(menuList, visitDate));
 
         return eventList;
     }
@@ -28,6 +33,67 @@ public class Event {
         events.add("christmas");
         events.add(String.valueOf(discount));
         return events;
+    }
+
+    private List<String> weekday(Order menuList, int visitDate) {
+        return generateEvent(menuList, visitDate, Menu.Category.디저트, "평일 할인");
+    }
+    
+    private List<String> weekend(Order menuList, int visitDate) {
+        return generateEvent(menuList, visitDate, Menu.Category.메인, "주말 할인");
+    }
+
+    private List<String> generateEvent(Order menuList, int visitDate, Menu.Category category, String eventName) {
+        List<String> events = new ArrayList<>();
+        int discount = calculateDiscount(menuList, visitDate, category);
+    
+        if (discount > 0) {
+            events.add(eventName);
+            events.add(String.valueOf(discount));
+        }
+        return events;
+    }
+
+    private int calculateDiscount(Order menuList, int visitDate, Menu.Category category) {
+        int total = 0;
+        int itemCount = countCategory(menuList, category);
+    
+        if (isWeekday(visitDate) && category == Menu.Category.디저트) {
+            total = itemCount * 2023;
+        }
+
+        if (isWeekend(visitDate) && category == Menu.Category.메인) {
+            total = itemCount * 2023;
+        }
+    
+        return total;
+    }
+
+    private boolean isWeekday(int visitDate) {
+        LocalDate date = LocalDate.of(2023, 12, visitDate);
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+        return dayOfWeek.getValue() >= 1 && dayOfWeek.getValue() <= 4 || dayOfWeek.getValue() == 7;
+    }
+    
+    private boolean isWeekend(int visitDate) {
+        LocalDate date = LocalDate.of(2023, 12, visitDate);
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        
+        return dayOfWeek.getValue() >= 5 && dayOfWeek.getValue() <= 6;
+    }
+
+    private int countCategory(Order menuList, Menu.Category category) {
+        int categoryCount = 0;
+    
+        for (String menuName : menuList.getMenuNames()) {
+            Menu selectedMenu = getMenuByName(menuName);
+    
+            if (selectedMenu != null && selectedMenu.getCategory() == category) {
+                categoryCount += menuList.getMenuCounts().get(menuList.getMenuNames().indexOf(menuName));
+            }
+        }
+        return categoryCount;
     }
 
     private boolean onlyDrinks(Order menuList){

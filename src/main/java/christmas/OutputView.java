@@ -8,12 +8,28 @@ public class OutputView {
         printOrderAmount(eventList.get(0));
         
         if (!eventList.contains("이벤트 불가")){
-            if (eventList.contains("christmas")){
-                int christmasIndex = eventList.indexOf("christmas")+1;
-                printChristmasDday(Integer.parseInt(eventList.get(christmasIndex)));
-            }
+            discountEvent(eventList);
         }
     }
+
+    private void discountEvent(List<String> eventList){
+        System.out.println("");
+        System.out.println("<혜택 내역>");
+        
+        if (eventList.contains("christmas")){
+            int christmasIndex = eventList.indexOf("christmas")+1;
+            printChristmasDday(Integer.parseInt(eventList.get(christmasIndex)));
+        }
+        if (eventList.contains("평일 할인")){
+            int dayIndex = eventList.indexOf("평일 할인")+1;
+            printWeekday(Integer.parseInt(eventList.get(dayIndex)));
+        }
+        if (eventList.contains("주말 할인")){
+            int dayIndex = eventList.indexOf("주말 할인")+1;
+            printWeekend(Integer.parseInt(eventList.get(dayIndex)));
+        }
+    }
+
     private void printOrderMenu(Order menuList, int visitDate){
         System.out.println("12월" + visitDate + "일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!");
         System.out.println("");
@@ -38,5 +54,15 @@ public class OutputView {
     private void printChristmasDday(int total){
         String formattedTotal = String.format("%,d", total);
         System.out.println("크리스마스 디데이 할인: -" + formattedTotal + "원");
+    }
+
+    private void printWeekday(int total){
+        String formattedTotal = String.format("%,d", total);
+        System.out.println("평일 할인: -" + formattedTotal + "원");
+    }
+
+    private void printWeekend(int total){
+        String formattedTotal = String.format("%,d", total);
+        System.out.println("주말 할인: -" + formattedTotal + "원");
     }
 }
