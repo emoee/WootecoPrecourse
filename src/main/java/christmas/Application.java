@@ -11,8 +11,8 @@ public class Application {
         int visitDate = inputview.readDate();
         Order menuList = inputview.readMenu();
 
-        List<String> evenList = event.checkEventAllow(menuList, visitDate);
+        List<String> eventList = event.checkEventAllow(menuList, visitDate);
         
-        outputView.allEvent(evenList, menuList, visitDate);
+        outputView.allEvent(eventList, menuList, visitDate);
     }
 }

@@ -3,65 +3,63 @@ package christmas;
 import java.util.List;
 
 public class OutputView {
-    private static final String CHRISTMAS_EVENT_NAME = "christmas";
-    private static final String GIFT_EVENT_NAME = "giftEvent";
-    private static final String SPECIAL_EVENT_NAME = "specialDiscount";
     private static final String EVENT_NOT_ALLOWED_MESSAGE = "이벤트 불가";
-    private static final String WEEKDAY_EVENT_MESSAGE = "평일 할인";
-    private static final String WEEKEND_EVENT_MESSAGE = "주말 할인";
-
 
     public void allEvent(List<String> eventList, Order menuList, int visitDate){
+        EventResult eventResult = new EventResult(eventList);
         printOrderMenu(menuList, visitDate);
         printOrderAmount(eventList.get(0));
-        printGift(eventList);
+        printGift(eventResult.resultGift());
 
-        
         if (!eventList.contains(EVENT_NOT_ALLOWED_MESSAGE)){
-            discountEvent(eventList);
+            discountEvent(eventResult);
         }
+
+        printEventTotal(eventResult.getEventTotal());
     }
 
-    private void discountEvent(List<String> eventList){
+    private void discountEvent(EventResult eventResult){
         System.out.println("");
         System.out.println("<혜택 내역>");
-        
-        if (eventList.contains(CHRISTMAS_EVENT_NAME)){
-            int christmasIndex = eventList.indexOf(CHRISTMAS_EVENT_NAME)+1;
-            printChristmasDday(Integer.parseInt(eventList.get(christmasIndex)));
-        }
-        if (eventList.contains(WEEKDAY_EVENT_MESSAGE)){
-            int dayIndex = eventList.indexOf(WEEKDAY_EVENT_MESSAGE)+1;
-            printWeekday(Integer.parseInt(eventList.get(dayIndex)));
-        }
-        if (eventList.contains(WEEKEND_EVENT_MESSAGE)){
-            int dayIndex = eventList.indexOf(WEEKEND_EVENT_MESSAGE)+1;
-            printWeekend(Integer.parseInt(eventList.get(dayIndex)));
-        }
-        if (eventList.contains(SPECIAL_EVENT_NAME)){
-            int dayIndex = eventList.indexOf(SPECIAL_EVENT_NAME)+1;
-            printSpecial(Integer.parseInt(eventList.get(dayIndex)));
-        }
+
+        printChristmasDday(eventResult.resultChristmas());
+        printWeekday(eventResult.resultWeekday());
+        printWeekend(eventResult.resultWeekend());
+        printSpecial(eventResult.resultSpecial());      
+        printGiftPrice(eventResult.resultGiftPrice());
     }
 
-    private void printGift(List<String> eventList){
+    private void printEventTotal(int total){
+        String formattedTotal = String.format("%,d", total);
+
+        System.out.println("");
+        System.out.println("<총혜택 금액>");
+        System.out.println("-" + formattedTotal + "원");
+    }
+
+    private void printGift(String gift){
         System.out.println("");
         System.out.println("<증정 메뉴>");
-
         String giftname = "없음";
 
-        if (eventList.contains(GIFT_EVENT_NAME)) {
-            int index = eventList.indexOf(GIFT_EVENT_NAME) + 1;
-            if (index < eventList.size() && eventList.get(index).equals("샴페인")) {
-                giftname = eventList.get(index) + " 1개";
-            }
-        }
+        if (gift.length() > 0){
+            giftname = gift;
+        } 
         System.out.println(giftname);
     }
 
+    private void printGiftPrice(int total){
+        if (total > 0){
+            String formattedTotal = String.format("%,d", total);
+            System.out.println("증정 이벤트: -" + formattedTotal + "원");
+        }
+    }
+
     private void printSpecial(int total){
-        String formattedTotal = String.format("%,d", total);
-        System.out.println("특별 할인: -" + formattedTotal + "원");
+        if (total > 0){
+            String formattedTotal = String.format("%,d", total);
+            System.out.println("특별 할인: -" + formattedTotal + "원");
+        }
     }
 
     private void printOrderMenu(Order menuList, int visitDate){
@@ -86,17 +84,23 @@ public class OutputView {
     }
 
     private void printChristmasDday(int total){
-        String formattedTotal = String.format("%,d", total);
-        System.out.println("크리스마스 디데이 할인: -" + formattedTotal + "원");
+        if (total > 0){
+            String formattedTotal = String.format("%,d", total);
+            System.out.println("크리스마스 디데이 할인: -" + formattedTotal + "원");
+        }
     }
 
     private void printWeekday(int total){
-        String formattedTotal = String.format("%,d", total);
-        System.out.println("평일 할인: -" + formattedTotal + "원");
+        if (total > 0){
+            String formattedTotal = String.format("%,d", total);
+            System.out.println("평일 할인: -" + formattedTotal + "원");
+        }
     }
 
     private void printWeekend(int total){
-        String formattedTotal = String.format("%,d", total);
-        System.out.println("주말 할인: -" + formattedTotal + "원");
+        if (total > 0){
+            String formattedTotal = String.format("%,d", total);
+            System.out.println("주말 할인: -" + formattedTotal + "원");
+        }
     }
 }
