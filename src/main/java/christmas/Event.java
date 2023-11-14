@@ -12,22 +12,19 @@ public class Event {
     private static final String EVENT_NOT_ALLOWED_MESSAGE = "이벤트 불가";
     private static final String WEEKDAY_EVENT_MESSAGE = "평일 할인";
     private static final String WEEKEND_EVENT_MESSAGE = "주말 할인";
-
     private static final int GIFT_ELIGIBILITY_THRESHOLD = 120000;
-
     private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
     private static final int WEEK_DISCOUNT_AMOUNT = 2023;
 
-
     public List<String> checkEventAllow(Order menuList, int visitDate){
         List<String> eventList = new ArrayList<>();
+        
         int total = calculateTotal(menuList);
         eventList.add(String.valueOf(total));
 
         if (total < 10000 || onlyDrinks(menuList)){
             eventList.add(EVENT_NOT_ALLOWED_MESSAGE);
         }
-
         eventList.addAll(christmas_Dday(menuList, visitDate));
         eventList.addAll(weekday(menuList, visitDate));
         eventList.addAll(weekend(menuList, visitDate));
@@ -80,6 +77,7 @@ public class Event {
         if (checkDate(visitDate).equals(CHRISTMAS_EVENT_NAME)){
             discount = calculateChristmasDiscount(visitDate);
         }
+
         events.add(CHRISTMAS_EVENT_NAME);
         events.add(String.valueOf(discount));
         return events;
@@ -111,11 +109,9 @@ public class Event {
         if (isWeekday(visitDate) && category == Menu.Category.디저트) {
             total = itemCount * WEEK_DISCOUNT_AMOUNT;
         }
-
         if (isWeekend(visitDate) && category == Menu.Category.메인) {
             total = itemCount * WEEK_DISCOUNT_AMOUNT;
         }
-    
         return total;
     }
 
@@ -148,8 +144,10 @@ public class Event {
 
     private boolean onlyDrinks(Order menuList){
         boolean hasNonDrink = true;
+
         for (String menuName : menuList.getMenuNames()){
             Menu selectedMenu = getMenuByName(menuName);
+
             if (selectedMenu != null && selectedMenu.getCategory() != Menu.Category.음료){
                 hasNonDrink = false;
             }
@@ -177,6 +175,7 @@ public class Event {
 
     private int calculateChristmasDiscount(int visitDate){
         int discount = 1000 + (visitDate - 1) * 100;
+
         return discount > 3400 ? 3400 : discount;
     }
 
@@ -185,7 +184,6 @@ public class Event {
         if (visitDate > 0 && visitDate < 26){
             event_type = CHRISTMAS_EVENT_NAME;
         }
-
         return event_type;
     }
 
