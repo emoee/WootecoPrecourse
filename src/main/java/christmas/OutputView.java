@@ -7,14 +7,11 @@ public class OutputView {
 
     public void allEvent(List<String> eventList, Order menuList, int visitDate){
         EventResult eventResult = new EventResult(eventList);
+
         printOrderMenu(menuList, visitDate);
         printOrderAmount(eventList.get(0));
         printGift(eventResult.resultGift());
-
-        if (!eventList.contains(EVENT_NOT_ALLOWED_MESSAGE)){
-            discountEvent(eventResult);
-        }
-
+        discountEvent(eventResult);
         printEventTotal(eventResult.getEventTotal());
         printFinalAmount(eventResult.getOrderTotal());
         printBadge(eventResult.getBadge());
@@ -24,6 +21,10 @@ public class OutputView {
         System.out.println("");
         System.out.println("<혜택 내역>");
 
+        if (eventResult.getEventList().contains(EVENT_NOT_ALLOWED_MESSAGE)){
+            System.out.println("없음");
+            return;
+        }
         printChristmasDday(eventResult.resultChristmas());
         printWeekday(eventResult.resultWeekday());
         printWeekend(eventResult.resultWeekend());
@@ -34,11 +35,11 @@ public class OutputView {
     private void printEventTotal(int total){
         String formattedTotal = String.format("%,d", total);
 
-        System.out.println("");
-        System.out.println("<총혜택 금액>");
         if (total > 0 ){
             formattedTotal = ("-" + formattedTotal);
         }
+        System.out.println("");
+        System.out.println("<총혜택 금액>");
         System.out.println(formattedTotal + "원");
     }
 
@@ -90,10 +91,11 @@ public class OutputView {
     }
 
     private void printOrderAmount(String totalString){
-        System.out.println("");
-        System.out.println("<할인 전 총주문 금액>");
         double total = Double.parseDouble(totalString);
         String formattedTotal = String.format("%,.0f", total);
+
+        System.out.println("");
+        System.out.println("<할인 전 총주문 금액>");
         System.out.println(formattedTotal + "원");
     }
 
