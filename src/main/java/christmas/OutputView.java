@@ -13,7 +13,7 @@ public class OutputView {
         printGift(eventResult.resultGift());
         discountEvent(eventResult);
         printEventTotal(eventResult.getEventTotal());
-        printFinalAmount(eventResult.getOrderTotal());
+        printFinalAmount(eventResult.getFinalTotal());
         printBadge(eventResult.getBadge());
     }
 

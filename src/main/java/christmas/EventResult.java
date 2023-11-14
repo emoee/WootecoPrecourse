@@ -12,12 +12,14 @@ public class EventResult {
     private List<String> eventList;
     private int orderTotal;
     private int eventTotal;
+    private int giftPrice;
     private String badge;
 
     public EventResult(List<String> eventList){
         this.eventList = eventList;
         this.orderTotal = Integer.parseInt(eventList.get(0));
         this.eventTotal = 0;
+        this.giftPrice = 0;
         this.badge = "없음";
     }
 
@@ -31,6 +33,10 @@ public class EventResult {
 
     public int getEventTotal(){
         return eventTotal;
+    }
+
+    public int getFinalTotal(){
+        return orderTotal-eventTotal+giftPrice;
     }
 
     public String getBadge(){
@@ -108,6 +114,7 @@ public class EventResult {
             result = Integer.parseInt(eventList.get(dayIndex));
         }
         this.eventTotal += result;
+        this.giftPrice = result;
         
         return result;
     }
