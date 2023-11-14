@@ -3,7 +3,9 @@ package christmas;
 import camp.nextstep.edu.missionutils.Console;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class InputView {
     public int readDate() {
@@ -43,20 +45,47 @@ public class InputView {
     }
 
     private void validateMenu(String[] menuList) {
-        for (String menu : menuList) {
-            String menuName = menu.split("-")[0];
-            try {
-                Menu selectedMenu = Menu.valueOf(menuName);
+        Set<String> uniqueMenus = new HashSet<>();
 
-                if (!menu.matches("[가-힣]+-\\d{1,2}")) {
-                    throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
-                }
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
-            }
+        for (String menu : menuList) {
+            validateSingleMenu(menu, uniqueMenus);
         }
+
         if (calculateTotal(menuList) > 20) {
             throw new IllegalArgumentException("[ERROR] 메뉴는 한 번에 최대 20개까지만 주문할 수 있습니다.");
+        }
+    }
+    
+    private void validateSingleMenu(String menu, Set<String> uniqueMenus) {
+        String menuName = menu.split("-")[0];
+        
+        try {
+            Menu selectedMenu = Menu.valueOf(menuName);
+            int quantity = Integer.parseInt(menu.split("-")[1]);
+    
+            validateMenuFormat(menu);
+            validateQuantity(quantity);
+            validateDuplicateMenu(menuName, uniqueMenus);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+    }
+    
+    private void validateMenuFormat(String menu) {
+        if (!menu.matches("[가-힣]+-\\d{1,2}")) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        }
+    }
+    
+    private void validateQuantity(int quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("[ERROR] 메뉴의 개수는 1 이상이어야 합니다. 다시 입력해 주세요.");
+        }
+    }
+    
+    private void validateDuplicateMenu(String menuName, Set<String> uniqueMenus) {
+        if (!uniqueMenus.add(menuName)) {
+            throw new IllegalArgumentException("[ERROR] 중복된 메뉴가 있습니다. 다시 입력해 주세요.");
         }
     }
     
