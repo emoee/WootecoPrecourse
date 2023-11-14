@@ -10,7 +10,6 @@ public class Application {
 
         int visitDate = inputview.readDate();
         Order menuList = inputview.readMenu();
-
         List<String> eventList = event.checkEventAllow(menuList, visitDate);
         
         outputView.allEvent(eventList, menuList, visitDate);

@@ -12,6 +12,7 @@ public class Event {
     private static final String EVENT_NOT_ALLOWED_MESSAGE = "이벤트 불가";
     private static final String WEEKDAY_EVENT_MESSAGE = "평일 할인";
     private static final String WEEKEND_EVENT_MESSAGE = "주말 할인";
+    
     private static final int GIFT_ELIGIBILITY_THRESHOLD = 120000;
     private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
     private static final int WEEK_DISCOUNT_AMOUNT = 2023;
@@ -176,7 +177,7 @@ public class Event {
     private int calculateChristmasDiscount(int visitDate){
         int discount = 1000 + (visitDate - 1) * 100;
 
-        return discount > 3400 ? 3400 : discount;
+        return discount;
     }
 
     private String checkDate(int visitDate){
