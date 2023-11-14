@@ -16,6 +16,8 @@ public class OutputView {
         }
 
         printEventTotal(eventResult.getEventTotal());
+        printFinalAmount(eventResult.getOrderTotal());
+        printBadge(eventResult.getBadge());
     }
 
     private void discountEvent(EventResult eventResult){
@@ -34,18 +36,30 @@ public class OutputView {
 
         System.out.println("");
         System.out.println("<총혜택 금액>");
-        System.out.println("-" + formattedTotal + "원");
+        if (total > 0 ){
+            formattedTotal = ("-" + formattedTotal);
+        }
+        System.out.println(formattedTotal + "원");
+    }
+
+    private void printBadge(String badge){
+        System.out.println("");
+        System.out.println("<12월 이벤트 배지>");
+        System.out.println(badge);
+    }
+
+    private void printFinalAmount(int total){
+        String formattedTotal = String.format("%,d", total);
+
+        System.out.println("");
+        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println(formattedTotal + "원");
     }
 
     private void printGift(String gift){
         System.out.println("");
         System.out.println("<증정 메뉴>");
-        String giftname = "없음";
-
-        if (gift.length() > 0){
-            giftname = gift;
-        } 
-        System.out.println(giftname);
+        System.out.println(gift);
     }
 
     private void printGiftPrice(int total){

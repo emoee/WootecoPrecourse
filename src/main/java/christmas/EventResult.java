@@ -4,7 +4,9 @@ import java.util.List;
 
 public class EventResult {
     private List<String> eventList;
+    private int orderTotal;
     private int eventTotal;
+    private String badge;
 
     private static final String CHRISTMAS_EVENT_NAME = "christmas";
     private static final String GIFT_EVENT_NAME = "giftEvent";
@@ -14,15 +16,29 @@ public class EventResult {
 
     public EventResult(List<String> eventList){
         this.eventList = eventList;
+        this.orderTotal = Integer.parseInt(eventList.get(0));
         this.eventTotal = 0;
+        this.badge = "없음";
     }
 
     public List<String> getEventList(){
         return eventList;
     }
 
+    public int getOrderTotal(){
+        return orderTotal;
+    }
+
     public int getEventTotal(){
         return eventTotal;
+    }
+
+    public String getBadge(){
+        Badge badgefind = Badge.getBadgeForTotal(this.eventTotal);
+        if (badgefind != null){
+            this.badge = badgefind.getName();
+        }
+        return badge;
     }
 
     public int resultChristmas(){
@@ -66,7 +82,7 @@ public class EventResult {
     }
     
     public String resultGift(){
-        String giftname = " ";
+        String giftname = "없음";
         if (eventList.contains(GIFT_EVENT_NAME)) {
             int index = eventList.indexOf(GIFT_EVENT_NAME) + 1;
             if (index < eventList.size() && eventList.get(index).equals("샴페인")) {
